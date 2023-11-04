@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calc</title>
+    <style>
+        html{
+            font-size: 62.5%;
+        }
+        body {
+            background: #4d8ac8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #calculator {
+            background: #ebf5ff;
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-auto-rows: minmax(0, auto); 
+            grid-gap: 10px;
+            padding: 20px;
+            width: 35rem;
+            height: 45rem;
+        }
+
+        #display {
+            background: #cce5ff;
+            grid-row: 1 / span 1; 
+            grid-column: span 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 2rem;
+        }
+
+        #input {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-align: left;
+            font-size:medium;
+            color: #4582bf;
+        }
+
+        #result {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            text-align: right;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        button {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif  ;
+            background: #a3d0fa;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            outline: none;
+            border-color: #a3d0fa;
+            border-width: 0;
+            color: #508ac3;
+            font-weight: bold;
+        }
+        button.num {
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            background: #cbe5fe;
+            color: black;
+            font-weight:900 ;
+        }
+
+        button.enter {
+            background: #4d8ac8;
+            color: #ebf5ff;
+            grid-column: span 2; 
+        }
+    </style>
+</head>
+<body>
+    <div id="calculator">
+        <div id="display">
+            <div id="input"></div>
+            <div id="result"></div>
+        </div>
+        <button>(</button>
+        <button>)</button>
+        <button id="ans">ans</button>
+        <button id="del">del</button>
+        <button id="clear">clear</button>
+        <button class="num">7</button>
+        <button class="num">8</button>
+        <button class="num">9</button>
+        <button>%</button>
+        <button>√</button>
+        <button class="num">4</button>
+        <button class="num">5</button>
+        <button class="num">6</button>
+        <button value="*" id="multiply">x</button>
+        <button>/</button>
+        <button class="num">1</button>
+        <button class="num">2</button>
+        <button class="num">3</button>
+        <button>+</button>
+        <button>-</button>
+        <button>.</button>
+        <button class="num">0</button>
+        <button>+-</button>
+        <button class="enter">ENTER</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const screen = document.getElementById('input');
+            const resultscr = document.getElementById('result');
+            const buttons = document.querySelectorAll('button');
+            let currentInput = '';
+            let lastAns = 0;
+
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const buttonText = button.textContent;
+
+                    if (button.id === 'multiply') {
+            currentInput += '*'; // Replace the 'x' with '*'
+            screen.textContent = currentInput;
+
+                    }else if (buttonText === 'ENTER') {
+                        try {
+                            currentInput = currentInput.replace(/(\d*)√(\d+)/g, 'Math.sqrt($2)');
+                            console.log(currentInput);
+                    const result = eval(currentInput);
+                    lastAns = result;
+                    resultscr.textContent = result;
+                    currentInput = result.toString();
+                } catch (error) {
+                    resultscr.textContent = 'Error';
+                }
+                    } else if (buttonText === 'clear') {
+                        currentInput = '';
+                        resultscr.textContent='';
+                        screen.textContent = '0';
+                    } else if (buttonText === 'del') {
+                        currentInput = currentInput.slice(0, -1);
+                        screen.textContent = currentInput;
+                    } else if (buttonText === 'ans') {
+                        currentInput += lastAns;
+                        screen.textContent = currentInput;
+                    } else {
+                        currentInput += buttonText;
+                        screen.textContent = currentInput;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
